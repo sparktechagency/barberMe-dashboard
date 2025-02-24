@@ -31,8 +31,10 @@ const Sidebar = () => {
   const handleLogout = () => {
     localStorage.removeItem("authToken");
     localStorage.removeItem("refreshToken");
+    localStorage.removeItem("role");
     sessionStorage.removeItem("authToken");
     sessionStorage.removeItem("refreshToken");
+    sessionStorage.removeItem("role");
     Cookies.remove("refreshToken");
     navigate("/auth/login");
   };
@@ -47,45 +49,21 @@ const Sidebar = () => {
         </Link>
       ),
     },
-    // {
-    //   key: "/transactions",
-    //   icon: <DiGoogleAnalytics size={24} />,
-    //   label: <Link to="/transactions">Transactions</Link>,
-    // },
     {
-      key: "/banners",
-      icon: <MdFeaturedPlayList size={24} />,
-      label: <Link to="/banners">Banners</Link>,
-    },
-    // {
-    //   key: "/category",
-    //   icon: <BiSolidCategoryAlt size={24} />,
-    //   label: <Link to="/category">Category</Link>,
-    // },
-    {
-      key: "/users",
+      key: "/customers",
       icon: <TbUserScreen size={24} />,
-      label: <Link to="/users">Users</Link>,
+      label: <Link to="/customers">Customers</Link>,
     },
     {
-      key: "/vendors",
+      key: "/barbers",
       icon: <PiUserPlus size={24} />,
-      label: <Link to="/vendors">Barbers</Link>,
+      label: <Link to="/barbers">Barbers</Link>,
     },
     {
       key: "subMenuSalon",
       icon: <FaScissors size={24} />,
       label: "Salon",
       children: [
-        {
-          key: "/services",
-          icon: <MdMiscellaneousServices size={24} />,
-          label: (
-            <Link to="/services" className="text-white hover:text-white">
-              Services
-            </Link>
-          ),
-        },
         {
           key: "/salon-category",
           icon: <BiSolidCategoryAlt size={24} />,
@@ -107,21 +85,10 @@ const Sidebar = () => {
       ],
     },
     {
-      key: "/orders",
+      key: "/reservations",
       icon: <FaBorderStyle size={24} />,
-      label: <Link to="/orders">Orders</Link>,
+      label: <Link to="/reservations">Reservations</Link>,
     },
-    {
-      key: "/cancellation",
-      icon: <MdCancelPresentation size={24} />,
-      label: <Link to="/cancellation">Cancellation</Link>,
-    },
-    {
-      key: "/our-transactions",
-      icon: <FaMoneyBillTransfer size={24} />,
-      label: <Link to="/our-transactions">Transactions</Link>,
-    },
-
     {
       key: "subMenuSetting",
       icon: <IoSettingsOutline size={24} />,
@@ -146,14 +113,7 @@ const Sidebar = () => {
             </Link>
           ),
         },
-        {
-          key: "/offer-list",
-          label: (
-            <Link to="/offer-list" className="text-white hover:text-white">
-              Offer List
-            </Link>
-          ),
-        },
+
         {
           key: "/about-us",
           label: (

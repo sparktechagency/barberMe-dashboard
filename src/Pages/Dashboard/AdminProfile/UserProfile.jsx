@@ -21,14 +21,11 @@ const PersonalInfo = () => {
   const [file, setFile] = useState(null);
   const [form] = Form.useForm();
 
-  const isLoading = false;
+  const { data: userData, isLoading } = useFetchAdminProfileQuery();
+  const [updateAdminProfile] = useUpdateAdminProfileMutation();
 
-  // const { data: fetchAdminProfile, isLoading } = useFetchAdminProfileQuery();
-  // const [updateAdminProfile] = useUpdateAdminProfileMutation();
-
-  const fetchAdminProfile = [];
-
-  const adminData = fetchAdminProfile?.data;
+  const adminData = userData?.data;
+  console.log(adminData);
 
   useEffect(() => {
     if (adminData) {

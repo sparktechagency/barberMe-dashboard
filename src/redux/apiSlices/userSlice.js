@@ -17,15 +17,29 @@ const userSlice = api.injectEndpoints({
           url: "/user",
         };
       },
+      providesTags: ["User"],
     }),
-    vendors: builder.query({
+
+    getAllCustomers: builder.query({
       query: () => {
         return {
           method: "GET",
-          url: "/user?role=VENDOR",
+          url: "/admin/user-list?role=CUSTOMER",
         };
       },
+      providesTags: ["User"],
     }),
+
+    getAllBerbers: builder.query({
+      query: () => {
+        return {
+          method: "GET",
+          url: "/admin/user-list?role=BARBER",
+        };
+      },
+      providesTags: ["User"],
+    }),
+
     userById: builder.query({
       query: (id) => {
         return {
@@ -40,6 +54,7 @@ const userSlice = api.injectEndpoints({
 export const {
   useAdminQuery,
   useUsersQuery,
-  useVendorsQuery,
+  useGetAllCustomersQuery,
+  useGetAllBerbersQuery,
   useUserByIdQuery,
 } = userSlice;

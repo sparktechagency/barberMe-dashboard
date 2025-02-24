@@ -45,11 +45,10 @@ import Vendor from "../Pages/Dashboard/Vendor";
 const router = createBrowserRouter([
   {
     path: "/",
-    // element: <ProtectedRoute><Main /></ProtectedRoute> ,
     element: (
-      // <PrivateRoute>
-      <Main />
-      // </PrivateRoute>
+      <PrivateRoute>
+        <Main />
+      </PrivateRoute>
     ),
     children: [
       {
@@ -80,13 +79,12 @@ const router = createBrowserRouter([
         path: "/barber/profile/:id",
         element: <Vendor />,
       },
-
       {
-        path: "/users",
+        path: "/customers",
         element: <Users />,
       },
       {
-        path: "/vendors",
+        path: "/barbers",
         element: <Vendors />,
       },
       {
@@ -105,11 +103,6 @@ const router = createBrowserRouter([
         path: "/our-transactions",
         element: <OurTransactions />,
       },
-
-      // {
-      //   path: "/promotion",
-      //   element: <Promotion />,
-      // },
       {
         path: "/personal-information",
         element: <UserProfile />,
@@ -123,31 +116,25 @@ const router = createBrowserRouter([
         element: <Cancellation />,
       },
       {
-        path: "f-a-q",
+        path: "/f-a-q",
         element: <Faq />,
       },
       {
-        path: "about-us",
+        path: "/about-us",
         element: <AboutUs />,
       },
       {
-        path: "offer-list",
+        path: "/offer-list",
         element: <OfferList />,
       },
       {
-        path: "orders",
+        path: "/reservations",
         element: <Orders />,
       },
       {
         path: "/admin",
         element: <Admin />,
       },
-
-      // {
-      //   path: "/subscription",
-      //   element: <Subscription />,
-      // },
-
       {
         path: "/privacy-policy",
         element: <PrivacyPolicy />,
@@ -156,15 +143,6 @@ const router = createBrowserRouter([
         path: "/terms-and-condition",
         element: <TermsAndCondition />,
       },
-      // {
-      //   path: "/edit-terms-and-conditions",
-      //   element: <TermsAndCondition />,
-      // },
-      // {
-      //   path: "/press",
-      //   element: <Press />,
-      // },
-
       {
         path: "/change-password",
         element: <ChangePassword />,

@@ -8,50 +8,22 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-
-const data = [
-  {
-    name: "Mo",
-    Sales: 4000,
-    Revenue: 2400,
-  },
-  {
-    name: "Tu",
-    Sales: 3000,
-    Revenue: 1398,
-  },
-  {
-    name: "We",
-    Sales: 6800,
-    Revenue: 3200,
-  },
-  {
-    name: "Th",
-    Sales: 4780,
-    Revenue: 1908,
-  },
-  {
-    name: "Fr",
-    Sales: 4890,
-    Revenue: 2800,
-  },
-  {
-    name: "Su",
-    Sales: 3390,
-    Revenue: 2800,
-  },
-  {
-    name: "St",
-    Sales: 3490,
-    Revenue: 1300,
-  },
-];
+import { useRevenueStasticsQuery } from "../../../redux/apiSlices/dashboardSlice";
 
 const SalesTrackingChart = () => {
+  const { data: revenueData, isLoading } = useRevenueStasticsQuery();
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  const revenue = revenueData?.data;
+  console.log(revenue);
+
   return (
-    <ResponsiveContainer width="90%" height={230}>
+    <ResponsiveContainer width="95%" height={250}>
       <BarChart
-        data={data}
+        data={revenue}
         margin={{
           top: 20,
           right: 30,
@@ -61,24 +33,17 @@ const SalesTrackingChart = () => {
         barCategoryGap="30%" // Adjust gap between bars
       >
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="name" />
+        <XAxis dataKey="month" />
         <YAxis />
         <Tooltip />
         <Legend />
         {/* Thinner bars */}
         <Bar
-          dataKey="Sales"
+          dataKey="revenue"
           stackId="a"
           fill="#8b0000"
           radius={[20, 20, 0, 0]} // Optional: rounded top corners
-          barSize={10} // Make bars thinner
-        />
-        <Bar
-          dataKey="Revenue"
-          stackId="a"
-          fill="#ffe7e7"
-          radius={[20, 20, 0, 0]} // Optional: rounded top corners
-          barSize={10} // Make bars thinner
+          barSize={25} // Make bars thinner
         />
       </BarChart>
     </ResponsiveContainer>

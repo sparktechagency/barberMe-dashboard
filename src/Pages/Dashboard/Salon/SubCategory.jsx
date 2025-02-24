@@ -1,143 +1,180 @@
 import React, { useState } from "react";
-import { Collapse, Input } from "antd";
 
-const { Panel } = Collapse;
+import {
+  useCreateSubCategoryMutation,
+  useDeleteSubCategoryMutation,
+  useGetAllCategoriesQuery,
+  useGetAllSubCategoriesQuery,
+} from "../../../redux/apiSlices/categorySlice";
+import { Button, Form, Input, Modal, Select, Table } from "antd";
+import { RiDeleteBin5Line } from "react-icons/ri";
+import toast from "react-hot-toast";
+
 const { Search } = Input;
 
 const SubCategory = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [form] = Form.useForm();
 
-  const subCategoriesData = [
-    {
-      id: 1,
-      name: "Men's Haircut",
-      description: "Classic and modern haircuts for men.",
-      category: "Hair Services",
-      services: ["Classic Cut", "Fade Cut", "Buzz Cut"],
-    },
-    {
-      id: 2,
-      name: "Women's Hair Styling",
-      description: "Customized hair styles for women.",
-      category: "Hair Services",
-      services: ["Blow Dry", "Updo", "Curling", "Braiding"],
-    },
-    {
-      id: 3,
-      name: "Color Treatments",
-      description: "Hair coloring and highlights services.",
-      category: "Hair Services",
-      services: ["Single Process Color", "Highlights", "Balayage"],
-    },
-    {
-      id: 4,
-      name: "Spa Treatments",
-      description:
-        "Relaxing treatments like scalp massage and deep conditioning.",
-      category: "Hair Services",
-      services: ["Scalp Massage", "Deep Conditioning Treatment"],
-    },
-    {
-      id: 5,
-      name: "Hand Care",
-      description: "Moisturizing and therapeutic hand treatments.",
-      category: "Nail Services",
-      services: ["Manicure", "Paraffin Treatment", "Nail Art"],
-    },
-    {
-      id: 6,
-      name: "Foot Care",
-      description: "Includes pedicure and foot massage.",
-      category: "Nail Services",
-      services: ["Pedicure", "Foot Massage", "Callus Removal"],
-    },
-    {
-      id: 7,
-      name: "Decorative Nails",
-      description: "Nail art, embellishments, and gels.",
-      category: "Nail Services",
-      services: ["Nail Art", "Gel Extensions", "French Tips"],
-    },
-    {
-      id: 8,
-      name: "Skin Care",
-      description: "Facials, masks, and skin treatments.",
-      category: "Beauty Services",
-      services: ["Deep Clean Facial", "Exfoliation", "Anti-Aging Treatments"],
-    },
-    {
-      id: 9,
-      name: "Hair Removal",
-      description: "Waxing and threading for unwanted hair.",
-      category: "Beauty Services",
-      services: ["Waxing", "Threading", "Laser Hair Removal"],
-    },
-    {
-      id: 10,
-      name: "Facial Grooming",
-      description: "Eyebrow shaping, facial threading, and grooming.",
-      category: "Beauty Services",
-      services: ["Eyebrow Shaping", "Facial Threading", "Beard Grooming"],
-    },
-    {
-      id: 11,
-      name: "Body Massage",
-      description: "Various massage techniques for relaxation.",
-      category: "Wellness Services",
-      services: ["Swedish Massage", "Deep Tissue Massage", "Hot Stone Massage"],
-    },
-    {
-      id: 12,
-      name: "Skin Exfoliation",
-      description: "Exfoliating treatments for smoother skin.",
-      category: "Wellness Services",
-      services: ["Body Scrub", "Chemical Peel", "Microdermabrasion"],
-    },
-  ];
+  const { data: subCategories, isLoading } = useGetAllSubCategoriesQuery();
+  const { data: categories, isLoading: categoryLoading } =
+    useGetAllCategoriesQuery();
+  const [createSubCategory, { isLoading: creating }] =
+    useCreateSubCategoryMutation();
+  const [deleteSubCategory, { isLoading: deleting }] =
+    useDeleteSubCategoryMutation();
 
-  const filteredSubCategories = subCategoriesData.filter(
-    (subCategory) =>
-      subCategory.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      subCategory.category.toLowerCase().includes(searchTerm.toLowerCase())
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  const subCategoriesData = subCategories?.data || [];
+  const categoriesData = categories?.data || [];
+  // console.log(subCategoriesData);
+
+  const filteredSubCategories = subCategoriesData?.filter((subCategory) =>
+    subCategory?.title?.toLowerCase()?.includes(searchTerm?.toLowerCase())
   );
 
+  const columns = [
+    {
+      title: "Serial No.",
+      dataIndex: "serialNo",
+      key: "serialNo",
+      render: (text, record, index) => <p>{index + 1}</p>,
+    },
+    {
+      title: "Subcategory Name",
+      dataIndex: "title",
+      key: "title",
+    },
+    {
+      title: "Category",
+      dataIndex: ["category", "name"],
+      key: "category",
+    },
+    {
+      title: "Action",
+      dataIndex: "action",
+      key: "action",
+      render: (_, record) => (
+        <div className="flex items-center gap-2">
+          <RiDeleteBin5Line
+            onClick={() => handleDeleteSubCategory(record._id)}
+            size={24}
+            className="text-red-600 cursor-pointer"
+          />
+        </div>
+      ),
+    },
+  ];
+  const handleAddSubCategory = () => {
+    setIsModalVisible(true); // Open the modal
+  };
+
+  const handleModalCancel = () => {
+    form.resetFields(); // Reset form fields
+    setIsModalVisible(false); // Close the modal
+  };
+
+  const handleModalOk = async () => {
+    try {
+      const values = await form.validateFields();
+      const newSubCategory = {
+        title: values.title,
+        category: values.categoryId,
+      };
+      const res = await createSubCategory(newSubCategory).unwrap();
+      if (res.success) {
+        toast.success("Subcategory added successfully");
+        form.resetFields();
+        setIsModalVisible(false);
+      }
+    } catch (error) {
+      console.error("Error adding subcategory:", error);
+    }
+  };
+
+  const handleDeleteSubCategory = (id) => {
+    Modal.confirm({
+      title: "Are you sure you want to delete this subcategory?",
+      content: "This action cannot be undone.",
+      onOk: async () => {
+        try {
+          await deleteSubCategory(id).unwrap();
+          console.log("Subcategory deleted successfully");
+        } catch (error) {
+          console.error("Error deleting subcategory:", error);
+        }
+      },
+    });
+  };
+
   return (
-    <div className="px-40">
+    <div className="">
       <h1 className="text-4xl text-center font-semibold my-10">
         Subcategories
       </h1>
-      <Search
-        placeholder="Search subcategories or categories"
-        onChange={(e) => setSearchTerm(e.target.value)}
-        style={{ marginBottom: 20 }}
+      <div className="flex justify-between mb-4">
+        <Search
+          placeholder="Search subcategories or categories"
+          onChange={(e) => setSearchTerm(e.target.value)}
+          style={{ marginBottom: 20 }}
+        />
+      </div>
+      <div className="flex justify-between items-center my-5">
+        <p className="my-3">
+          Total Services:{" "}
+          <span className="font-semibold">
+            {subCategoriesData.length} Items
+          </span>{" "}
+          Found
+        </p>
+        <Button type="primary" onClick={handleAddSubCategory}>
+          Add Subcategory
+        </Button>
+      </div>
+      <Table
+        columns={columns}
+        dataSource={filteredSubCategories}
+        rowKey="_id"
       />
-      <p className="my-3">
-        Total Services:{" "}
-        <span className="font-semibold">{subCategoriesData.length} Items</span>{" "}
-        Found
-      </p>
-      <Collapse accordion>
-        {filteredSubCategories.map((subCategory) => (
-          <Panel header={subCategory.name} key={subCategory.id}>
-            <p className="text-xl font-semibold border-b-2 pb-2">
-              {subCategory.description}
-            </p>
-            <p className=" font-semibold">Category: {subCategory.category}</p>
-            <ul className="my-5 bg-[#f8eeee] p-5 rounded-2xl">
-              <h1 className="text-lg font-semibold border-b-2 w-[20%] mb-2">
-                Services
-              </h1>
-              {subCategory.services.map((service, index) => (
-                <ul key={index} className="list-disc ml-5">
-                  <li>
-                    <span className="font-semibold">{service}</span>
-                  </li>
-                </ul>
+
+      <Modal
+        title="Add Subcategory"
+        open={isModalVisible}
+        onOk={handleModalOk}
+        onCancel={handleModalCancel}
+      >
+        <Form form={form} layout="vertical">
+          <Form.Item
+            name="title"
+            label="Subcategory Title"
+            rules={[
+              {
+                required: true,
+                message: "Please enter the subcategory title!",
+              },
+            ]}
+          >
+            <Input placeholder="Enter subcategory title" />
+          </Form.Item>
+          <Form.Item
+            name="categoryId"
+            label="Category"
+            rules={[{ required: true, message: "Please select the category!" }]}
+          >
+            <Select placeholder="Select category">
+              {categoriesData?.map((category) => (
+                <Select.Option key={category._id} value={category._id}>
+                  {category.name}
+                </Select.Option>
               ))}
-            </ul>
-          </Panel>
-        ))}
-      </Collapse>
+            </Select>
+          </Form.Item>
+        </Form>
+      </Modal>
     </div>
   );
 };

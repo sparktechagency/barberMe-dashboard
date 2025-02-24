@@ -2,66 +2,22 @@ import React, { useState } from "react";
 import { Table, Button, Space, Avatar, Select } from "antd";
 import { Link } from "react-router-dom";
 import randomImg from "../../assets/randomProfile2.jpg";
+import { useGetAllBerbersQuery } from "../../redux/apiSlices/userSlice";
+import moment from "moment";
+import { FaEye, FaLock } from "react-icons/fa6";
 
 const Vendors = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [pageSize, setPageSize] = useState(10);
 
-  // Dummy data for barbers
-  const barbers = {
-    data: {
-      data: [
-        {
-          id: "1",
-          name: "John Doe",
-          email: "john@example.com",
-          phoneNumber: "+123456789",
-          address: "123 Main St, Cityville",
-          experienceLevel: "Senior",
-          rating: 4.8,
-          totalServices: 120,
-          totalEarnings: "$6000",
-          status: "Active",
-          profileImg: "https://randomuser.me/api/portraits/men/1.jpg",
-          complaint: null,
-        },
-        {
-          id: "2",
-          name: "Jane Smith",
-          email: "jane@example.com",
-          phoneNumber: "+123456780",
-          address: "456 Secondary St, Townsville",
-          experienceLevel: "Intermediate",
-          rating: 4.5,
-          totalServices: 200,
-          totalEarnings: "$8000",
-          status: "Inactive",
-          profileImg: "https://randomuser.me/api/portraits/women/2.jpg",
-          complaint: null,
-        },
-        {
-          id: "3",
-          name: "Sam Wilson",
-          email: "sam@example.com",
-          phoneNumber: "+123456781",
-          address: "789 Tertiary St, Suburb",
-          experienceLevel: "Junior",
-          rating: 4.2,
-          totalServices: 50,
-          totalEarnings: "$2000",
-          status: "Suspended",
-          profileImg: "https://randomuser.me/api/portraits/men/3.jpg",
-          complaint: {
-            reason: "Violation of salon policies",
-            amount: "$50",
-          },
-        },
-        // Add more dummy barbers as needed
-      ],
-    },
-  };
+  const { data: getBarbers, isLoading } = useGetAllBerbersQuery();
 
-  const data = barbers?.data?.data;
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  const berbersList = getBarbers?.data?.users;
+  console.log(berbersList);
 
   const onSelectChange = (newSelectedRowKeys) => {
     setSelectedRowKeys(newSelectedRowKeys);
@@ -69,26 +25,31 @@ const Vendors = () => {
 
   const columns = [
     {
-      title: "Id",
-      dataIndex: "id",
-      key: "id",
+      title: "Serial No.",
+      dataIndex: "serialNo",
+      key: "serialNo",
+      render: (text, record, index) => <p>{index + 1}</p>,
     },
     {
       title: "Name",
       dataIndex: "name",
       key: "name",
       render: (text, record) => {
-        const name = record.name || "Unknown";
-        const imgUrl = record.profileImg || randomImg;
-        const fullImgUrl = imgUrl.startsWith("http")
-          ? imgUrl
-          : `${import.meta.env.VITE_BASE_URL}${imgUrl}`;
-
         return (
-          <Space>
-            <Avatar src={fullImgUrl} alt={name} size="large" />
-            <span>{name}</span>
-          </Space>
+          <span className="flex items-center gap-2">
+            <img
+              className="w-10 h-10 rounded-full"
+              src={
+                record?.profile
+                  ? record?.profile?.startsWith("http")
+                    ? record?.profile
+                    : `${import.meta.env.VITE_BASE_URL}${record?.profile}`
+                  : randomImg
+              }
+              alt=""
+            />
+            {text}
+          </span>
         );
       },
     },
@@ -98,88 +59,18 @@ const Vendors = () => {
       key: "email",
     },
     {
-      title: "Phone Number",
-      dataIndex: "phoneNumber",
-      key: "phoneNumber",
+      title: "discount",
+      dataIndex: "discount",
+      key: "discount",
+      align: "center",
     },
     {
-      title: "Address",
-      dataIndex: "address",
-      key: "address",
-    },
-    {
-      title: "Experience Level",
-      dataIndex: "experienceLevel",
-      key: "experienceLevel",
-    },
-    {
-      title: "Rating",
-      dataIndex: "rating",
-      key: "rating",
-      sorter: (a, b) => a.rating - b.rating,
-      render: (rating) => `${rating}`,
-    },
-    {
-      title: "Total Services",
-      dataIndex: "totalServices",
-      key: "totalServices",
-      sorter: (a, b) => a.totalServices - b.totalServices,
-    },
-    {
-      title: "Total Earnings",
-      dataIndex: "totalEarnings",
-      key: "totalEarnings",
-      sorter: (a, b) =>
-        parseFloat(a.totalEarnings.replace("$", "")) -
-        parseFloat(b.totalEarnings.replace("$", "")),
-    },
-    {
-      title: "Status",
-      dataIndex: "status",
-      key: "status",
-      render: (status) => {
-        let color;
-        switch (status) {
-          case "Active":
-            color = "green";
-            break;
-          case "Inactive":
-            color = "red";
-            break;
-          case "Suspended":
-            color = "orange";
-            break;
-          default:
-            color = "gray";
-        }
-
-        return <span style={{ color }}>{status}</span>;
-      },
-    },
-    {
-      title: "Complaint",
-      dataIndex: "complaint",
-      key: "complaint",
-      filters: [
-        { text: "None", value: "None" },
-        { text: "Has Complaints", value: "HasComplaints" },
-      ],
-      onFilter: (value, record) => {
-        if (value === "None") {
-          return !record.complaint;
-        } else if (value === "HasComplaints") {
-          return record.complaint !== null;
-        }
-        return true;
-      },
-      render: (complaint) =>
-        complaint ? (
-          <span className="text-red-700 font-semibold">
-            {complaint.amount},<br /> for {complaint.reason}
-          </span>
-        ) : (
-          "None"
-        ),
+      title: "Barber Since",
+      dataIndex: "createdAt",
+      key: "createdAt",
+      render: (text, record) => (
+        <p>{moment(record?.createdAt).format("DD/MM/YYYY")} </p>
+      ),
     },
     {
       title: "Actions",
@@ -187,14 +78,10 @@ const Vendors = () => {
       render: (text, record) => (
         <Space>
           <Link to={`/barber/profile/${record.id}`}>
-            <Button className="bg-[#FFF4E3] text-[#F3B806] border-none">
-              Details
-            </Button>
+            <FaEye size={20} />
           </Link>
 
-          <Button className="border border-red-600 text-red-700">
-            Restrict
-          </Button>
+          <FaLock className="cursor-pointer text-red-500" size={20} />
         </Space>
       ),
     },
@@ -239,8 +126,8 @@ const Vendors = () => {
           pageSize: pageSize,
         }}
         columns={columns}
-        dataSource={data}
-        rowKey={(record) => record.id}
+        dataSource={berbersList}
+        rowKey="_id"
       />
     </>
   );
