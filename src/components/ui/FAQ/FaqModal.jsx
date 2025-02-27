@@ -1,5 +1,10 @@
 import { Form, Input, Modal } from "antd";
 import React, { useEffect } from "react";
+import {
+  useCreateFaqMutation,
+  useUpdateFaqMutation,
+} from "../../../redux/apiSlices/faqSlice";
+import toast from "react-hot-toast";
 
 const FaqModal = ({
   setModalData,
@@ -8,6 +13,11 @@ const FaqModal = ({
   setOpenAddModel,
 }) => {
   const [form] = Form.useForm();
+
+  console.log(modalData);
+
+  const [createFaq] = useCreateFaqMutation();
+  const [updateFaq] = useUpdateFaqMutation();
 
   useEffect(() => {
     if (modalData) {
@@ -18,8 +28,40 @@ const FaqModal = ({
     }
   }, [modalData]);
 
-  const onFinish = (values) => {
-    console.log(values);
+  const onFinish = async (values) => {
+    if (modalData) {
+      console.log(modalData);
+
+      const data = {
+        ...values,
+      };
+
+      try {
+        const res = await updateFaq({ data, id: modalData?._id }).unwrap();
+        console.log(res);
+        if (res.success) {
+          toast.success("Faq updated successfully");
+          setOpenAddModel(false);
+          setModalData(null);
+          form.resetFields();
+        }
+      } catch (error) {
+        toast.error(error?.data?.message);
+      }
+    } else {
+      try {
+        const res = await createFaq(values).unwrap();
+        console.log(res);
+        if (res.success) {
+          toast.success("Faq added successfully");
+          setOpenAddModel(false);
+          setModalData(null);
+          form.resetFields();
+        }
+      } catch (error) {
+        toast.error(error?.data?.message);
+      }
+    }
   };
   return (
     <Modal

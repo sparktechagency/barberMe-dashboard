@@ -1,11 +1,11 @@
 import { api } from "../api/baseApi";
 
-const privacyPolicySlice = api.injectEndpoints({
+const faqSlice = api.injectEndpoints({
   endpoints: (builder) => ({
-    updatePricyPolicy: builder.mutation({
+    createFaq: builder.mutation({
       query: (data) => {
         return {
-          url: `/rule/privacy-policy`,
+          url: `/faq`,
           method: "POST",
           body: data,
           headers: {
@@ -15,11 +15,12 @@ const privacyPolicySlice = api.injectEndpoints({
           },
         };
       },
+      invalidatesTags: ["FAQS"],
     }),
-    privacyPolicy: builder.query({
+    getFaq: builder.query({
       query: () => {
         return {
-          url: `/rule/privacy-policy`,
+          url: `/faq`,
           method: "GET",
           headers: {
             Authorization: `Bearer ${JSON.parse(
@@ -28,18 +29,13 @@ const privacyPolicySlice = api.injectEndpoints({
           },
         };
       },
-      transformResponse: ({ data }) => {
-        return data;
-      },
+      providesTags: ["FAQS"],
     }),
-
-    //about us
-
-    createAboutUs: builder.mutation({
-      query: (data) => {
+    updateFaq: builder.mutation({
+      query: ({ data, id }) => {
         return {
-          url: `rule/about`,
-          method: "POST",
+          url: `/faq/${id}`,
+          method: "PATCH",
           body: data,
           headers: {
             Authorization: `Bearer ${JSON.parse(
@@ -48,12 +44,13 @@ const privacyPolicySlice = api.injectEndpoints({
           },
         };
       },
+      invalidatesTags: ["FAQS"],
     }),
-    aboutUs: builder.query({
-      query: () => {
+    deleteFaq: builder.mutation({
+      query: (id) => {
         return {
-          url: `rule/about`,
-          method: "GET",
+          url: `/faq/${id}`,
+          method: "DELETE",
           headers: {
             Authorization: `Bearer ${JSON.parse(
               localStorage.getItem("token")
@@ -61,13 +58,14 @@ const privacyPolicySlice = api.injectEndpoints({
           },
         };
       },
+      invalidatesTags: ["FAQS"],
     }),
   }),
 });
 
 export const {
-  useUpdatePricyPolicyMutation,
-  usePrivacyPolicyQuery,
-  useCreateAboutUsMutation,
-  useAboutUsQuery,
-} = privacyPolicySlice;
+  useCreateFaqMutation,
+  useGetFaqQuery,
+  useUpdateFaqMutation,
+  useDeleteFaqMutation,
+} = faqSlice;

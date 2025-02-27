@@ -1,14 +1,16 @@
 import React, { useState } from "react";
-import { Table, Button, Space, Avatar, Select } from "antd";
-import { Link } from "react-router-dom";
+import { Table, Space, Modal } from "antd";
 import randomImg from "../../assets/randomProfile2.jpg";
 import { useGetAllBerbersQuery } from "../../redux/apiSlices/userSlice";
 import moment from "moment";
 import { FaEye, FaLock } from "react-icons/fa6";
 
 const Vendors = () => {
-  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [pageSize, setPageSize] = useState(10);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [selectedBarber, setSelectedBarber] = useState(null);
+
+  console.log(selectedBarber);
 
   const { data: getBarbers, isLoading } = useGetAllBerbersQuery();
 
@@ -17,10 +19,15 @@ const Vendors = () => {
   }
 
   const berbersList = getBarbers?.data?.users;
-  console.log(berbersList);
 
-  const onSelectChange = (newSelectedRowKeys) => {
-    setSelectedRowKeys(newSelectedRowKeys);
+  const showModal = (record) => {
+    setSelectedBarber(record);
+    setIsModalVisible(true);
+  };
+
+  const handleClose = () => {
+    setIsModalVisible(false);
+    setSelectedBarber(null);
   };
 
   const columns = [
@@ -34,24 +41,22 @@ const Vendors = () => {
       title: "Name",
       dataIndex: "name",
       key: "name",
-      render: (text, record) => {
-        return (
-          <span className="flex items-center gap-2">
-            <img
-              className="w-10 h-10 rounded-full"
-              src={
-                record?.profile
-                  ? record?.profile?.startsWith("http")
-                    ? record?.profile
-                    : `${import.meta.env.VITE_BASE_URL}${record?.profile}`
-                  : randomImg
-              }
-              alt=""
-            />
-            {text}
-          </span>
-        );
-      },
+      render: (text, record) => (
+        <span className="flex items-center gap-2">
+          <img
+            className="w-10 h-10 rounded-full"
+            src={
+              record?.profile
+                ? record?.profile?.startsWith("http")
+                  ? record?.profile
+                  : `${import.meta.env.VITE_BASE_URL}${record?.profile}`
+                : randomImg
+            }
+            alt="Profile"
+          />
+          {text}
+        </span>
+      ),
     },
     {
       title: "Email",
@@ -59,7 +64,7 @@ const Vendors = () => {
       key: "email",
     },
     {
-      title: "discount",
+      title: "Discount",
       dataIndex: "discount",
       key: "discount",
       align: "center",
@@ -69,66 +74,74 @@ const Vendors = () => {
       dataIndex: "createdAt",
       key: "createdAt",
       render: (text, record) => (
-        <p>{moment(record?.createdAt).format("DD/MM/YYYY")} </p>
+        <p>{moment(record?.createdAt).format("DD/MM/YYYY")}</p>
       ),
     },
-    {
-      title: "Actions",
-      key: "actions",
-      render: (text, record) => (
-        <Space>
-          <Link to={`/barber/profile/${record.id}`}>
-            <FaEye size={20} />
-          </Link>
-
-          <FaLock className="cursor-pointer text-red-500" size={20} />
-        </Space>
-      ),
-    },
+    // {
+    //   title: "Actions",
+    //   key: "actions",
+    //   render: (text, record) => (
+    //     <Space>
+    //       <FaEye
+    //         size={20}
+    //         className="cursor-pointer"
+    //         onClick={() => showModal(record)}
+    //       />
+    //       <FaLock className="cursor-pointer text-red-500" size={20} />
+    //     </Space>
+    //   ),
+    // },
   ];
-
-  const rowSelection = {
-    selectedRowKeys,
-    onChange: onSelectChange,
-    selections: [
-      Table.SELECTION_ALL,
-      Table.SELECTION_INVERT,
-      Table.SELECTION_NONE,
-      {
-        key: "odd",
-        text: "Select Odd Row",
-        onSelect: (changeableRowKeys) => {
-          let newSelectedRowKeys = changeableRowKeys.filter(
-            (_, index) => index % 2 === 0
-          );
-          setSelectedRowKeys(newSelectedRowKeys);
-        },
-      },
-      {
-        key: "even",
-        text: "Select Even Row",
-        onSelect: (changeableRowKeys) => {
-          let newSelectedRowKeys = changeableRowKeys.filter(
-            (_, index) => index % 2 !== 0
-          );
-          setSelectedRowKeys(newSelectedRowKeys);
-        },
-      },
-    ],
-  };
 
   return (
     <>
-      <h1 className="text-2xl font-semibold  my-5">Barbers</h1>
+      <h1 className="text-2xl font-semibold my-5">Barbers</h1>
       <Table
         className="bg-white"
-        pagination={{
-          pageSize: pageSize,
-        }}
+        pagination={{ pageSize: pageSize }}
         columns={columns}
         dataSource={berbersList}
         rowKey="_id"
       />
+
+      <Modal
+        title="Barber Details"
+        open={isModalVisible}
+        onCancel={handleClose}
+        footer={null}
+      >
+        {selectedBarber && (
+          <div>
+            <div className="flex flex-col items-center justify-center">
+              <img
+                className="w-40 h-40 rounded-full mb-3"
+                src={
+                  selectedBarber?.profile
+                    ? selectedBarber?.profile?.startsWith("http")
+                      ? selectedBarber?.profile
+                      : `${import.meta.env.VITE_BASE_URL}${
+                          selectedBarber?.profile
+                        }`
+                    : randomImg
+                }
+                alt="Profile"
+              />
+              <p className="text-2xl font-semibold">{selectedBarber.name}</p>
+              <p className="text-gray-500 text-lg">{selectedBarber.email}</p>
+            </div>
+            <p className="my-2 text-lg">
+              <strong>Role:</strong> {selectedBarber.role}
+            </p>
+            <p className="my-2 text-lg">
+              <strong>Discount:</strong> {selectedBarber.discount}%
+            </p>
+            <p className="my-2 text-lg">
+              <strong>Barber Since:</strong>{" "}
+              {moment(selectedBarber?.createdAt).format("DD/MM/YYYY")}
+            </p>
+          </div>
+        )}
+      </Modal>
     </>
   );
 };

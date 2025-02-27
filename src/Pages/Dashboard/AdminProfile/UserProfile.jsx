@@ -21,11 +21,13 @@ const PersonalInfo = () => {
   const [file, setFile] = useState(null);
   const [form] = Form.useForm();
 
+  console.log(contact);
+
   const { data: userData, isLoading } = useFetchAdminProfileQuery();
   const [updateAdminProfile] = useUpdateAdminProfileMutation();
 
   const adminData = userData?.data;
-  console.log(adminData);
+  // console.log(adminData);
 
   useEffect(() => {
     if (adminData) {
@@ -35,7 +37,11 @@ const PersonalInfo = () => {
         address: adminData?.address,
         phone: adminData?.contact,
       });
-      setImgURL(`${baseUrl}${adminData?.profileImg}`);
+      setImgURL(
+        adminData?.profile?.startsWith("http")
+          ? adminData?.profile
+          : `${baseUrl}${adminData?.profile}`
+      );
       setContact(adminData?.contact);
     }
   }, [form, adminData]);

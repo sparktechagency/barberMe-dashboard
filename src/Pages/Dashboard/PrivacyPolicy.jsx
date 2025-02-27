@@ -11,20 +11,14 @@ import {
 const PrivacyPolicy = () => {
   const editor = useRef(null);
   const [content, setContent] = useState("");
-  const [selectedTab, setSelectedTab] = useState("USER");
-  const isLoading = false;
 
   useEffect(() => {
     setContent(content);
-  }, [selectedTab]);
+  }, []);
 
-  // const {
-  //   data: privacyPolicy,
-  //   isLoading,
-  //   refetch,
-  // } = usePrivacyPolicyQuery(selectedTab);
+  const { data: privacyPolicy, isLoading, refetch } = usePrivacyPolicyQuery();
 
-  // const [updatePricyPolicy] = useUpdatePricyPolicyMutation();
+  const [updatePricyPolicy] = useUpdatePricyPolicyMutation();
 
   if (isLoading) {
     return (
@@ -34,14 +28,11 @@ const PrivacyPolicy = () => {
     );
   }
 
-  const privacyPolicy = [];
-
   const privacyPolicyData = privacyPolicy?.content;
 
   const termsDataSave = async () => {
     const data = {
       content: content,
-      userType: selectedTab,
     };
 
     try {
@@ -59,46 +50,13 @@ const PrivacyPolicy = () => {
     }
   };
 
-  const tabContent = {
-    USER: privacyPolicyData,
-    VENDOR: privacyPolicyData,
-    CUSTOMER: privacyPolicyData,
-  };
-
   return (
     <div>
       <Title className="mb-4">Privacy Policy</Title>
 
-      <div className="flex justify-center gap-4 mb-4">
-        <button
-          className={`px-4 rounded-2xl py-2 ${
-            selectedTab === "USER" ? "bg-primary text-white" : "bg-gray-200"
-          }`}
-          onClick={() => setSelectedTab("USER")}
-        >
-          Users
-        </button>
-        <button
-          className={`px-4 rounded-2xl py-2 ${
-            selectedTab === "VENDOR" ? "bg-primary text-white" : "bg-gray-200"
-          }`}
-          onClick={() => setSelectedTab("VENDOR")}
-        >
-          Vendors
-        </button>
-        <button
-          className={`px-4 rounded-2xl py-2 ${
-            selectedTab === "CUSTOMER" ? "bg-primary text-white" : "bg-gray-200"
-          }`}
-          onClick={() => setSelectedTab("CUSTOMER")}
-        >
-          Customers
-        </button>
-      </div>
-
       <JoditEditor
         ref={editor}
-        value={tabContent[selectedTab]}
+        value={privacyPolicyData}
         onChange={(newContent) => {
           setContent(newContent);
         }}
