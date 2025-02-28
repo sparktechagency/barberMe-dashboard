@@ -31,7 +31,7 @@ const SubCategory = () => {
 
   const subCategoriesData = subCategories?.data || [];
   const categoriesData = categories?.data || [];
-  // console.log(subCategoriesData);
+  // //console.log(subCategoriesData);
 
   const filteredSubCategories = subCategoriesData?.filter((subCategory) =>
     subCategory?.title?.toLowerCase()?.includes(searchTerm?.toLowerCase())
@@ -103,7 +103,7 @@ const SubCategory = () => {
       onOk: async () => {
         try {
           await deleteSubCategory(id).unwrap();
-          console.log("Subcategory deleted successfully");
+          //console.log("Subcategory deleted successfully");
         } catch (error) {
           console.error("Error deleting subcategory:", error);
         }

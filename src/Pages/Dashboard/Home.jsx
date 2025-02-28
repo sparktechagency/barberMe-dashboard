@@ -1,7 +1,7 @@
 import React from "react";
 import SalesTrackingChart from "../../components/ui/Home/SalesTrackingChart";
 import RunningOrdersTable from "../../components/ui/Home/RunningOrdersTable";
-import rentMeLogo from "../../assets/navLogo.png";
+import logo from "../../assets/barberMeLogo.png";
 import UserEngagement from "../../components/ui/Home/UserEngagement";
 import GeneralStateSection from "../../components/ui/Home/GeneralStateSection";
 import Professionals from "../../components/ui/Home/Professionals";
@@ -17,7 +17,7 @@ const Home = () => {
   if (isLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <img src={rentMeLogo} alt="" />
+        <img src={logo} alt="" />
       </div>
     );
   }

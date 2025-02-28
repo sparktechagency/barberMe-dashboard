@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { ConfigProvider, Pagination } from "antd";
 import Title from "../../components/common/Title";
 import { useNotificationQuery } from "../../redux/apiSlices/notificationSlice";
-import rentMeLogo from "../../assets/navLogo.png";
+import logo from "../../assets/barberMeLogo.png";
 
 const notificationsData = [
   {
@@ -80,14 +80,14 @@ const Notifications = () => {
   if (isLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <img src={rentMeLogo} alt="" />
+        <img src={logo} alt="" />
       </div>
     );
   }
   const notifications = [];
   const notificationData = notifications.data;
 
-  console.log(notificationData);
+  //console.log(notificationData);
 
   const paginatedData = notificationsData.slice(
     (page - 1) * pageSize,
@@ -98,7 +98,7 @@ const Notifications = () => {
     <div>
       <div className="flex items-center justify-between mb-4">
         <Title className="text-[22px]">All Notifications</Title>
-        <button className="bg-[#5c2579cc] text-white h-10 px-4 rounded-md">
+        <button className="bg-primary text-white h-10 px-4 rounded-md">
           Read All
         </button>
       </div>

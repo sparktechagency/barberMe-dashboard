@@ -5,7 +5,7 @@ const ChangePassword = () => {
   const [form] = Form.useForm();
 
   const handleChangePassword = (values) => {
-    console.log(values);
+    //console.log(values);
   };
 
   return (

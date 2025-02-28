@@ -10,7 +10,7 @@ const Vendors = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedBarber, setSelectedBarber] = useState(null);
 
-  console.log(selectedBarber);
+  //console.log(selectedBarber);
 
   const { data: getBarbers, isLoading } = useGetAllBerbersQuery();
 

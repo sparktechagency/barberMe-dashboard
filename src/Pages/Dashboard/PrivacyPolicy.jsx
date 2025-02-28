@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import JoditEditor from "jodit-react";
 import Title from "../../components/common/Title";
-import rentMeLogo from "../../assets/navLogo.png";
+import logo from "../../assets/barberMeLogo.png";
 import toast from "react-hot-toast";
 import {
   usePrivacyPolicyQuery,
@@ -23,7 +23,7 @@ const PrivacyPolicy = () => {
   if (isLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <img src={rentMeLogo} alt="" />
+        <img src={logo} alt="" />
       </div>
     );
   }

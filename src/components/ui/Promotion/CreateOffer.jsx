@@ -19,11 +19,11 @@ const CreateOffer = () => {
   const onFinish = (values) => {
     // Simulate the image upload process
     const { upload, ...restValues } = values;
-    console.log("Form Data:", restValues);
+    //console.log("Form Data:", restValues);
 
     if (upload && upload.length > 0) {
       // Simulating successful file upload
-      console.log(`${upload[0].name} file uploaded successfully`);
+      //console.log(`${upload[0].name} file uploaded successfully`);
     }
   };
 
@@ -35,12 +35,12 @@ const CreateOffer = () => {
     },
     onChange(info) {
       if (info.file.status !== "uploading") {
-        console.log(info.file, info.fileList);
+        //console.log(info.file, info.fileList);
       }
       if (info.file.status === "done") {
-        console.log(`${info.file.name} file uploaded successfully`);
+        //console.log(`${info.file.name} file uploaded successfully`);
       } else if (info.file.status === "error") {
-        console.log(`${info.file.name} file upload failed.`);
+        //console.log(`${info.file.name} file upload failed.`);
       }
     },
   };

@@ -95,7 +95,7 @@ const Vendor = () => {
   ];
 
   const handleReviewAction = (reviewId, action) => {
-    console.log(`${action} review with ID: ${reviewId}`);
+    //console.log(`${action} review with ID: ${reviewId}`);
     // Implement the logic for approving, rejecting, or deleting the review
   };
 

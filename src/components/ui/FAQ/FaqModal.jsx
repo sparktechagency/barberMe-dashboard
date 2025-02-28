@@ -14,7 +14,7 @@ const FaqModal = ({
 }) => {
   const [form] = Form.useForm();
 
-  console.log(modalData);
+  //console.log(modalData);
 
   const [createFaq] = useCreateFaqMutation();
   const [updateFaq] = useUpdateFaqMutation();
@@ -30,7 +30,7 @@ const FaqModal = ({
 
   const onFinish = async (values) => {
     if (modalData) {
-      console.log(modalData);
+      //console.log(modalData);
 
       const data = {
         ...values,
@@ -38,7 +38,7 @@ const FaqModal = ({
 
       try {
         const res = await updateFaq({ data, id: modalData?._id }).unwrap();
-        console.log(res);
+        //console.log(res);
         if (res.success) {
           toast.success("Faq updated successfully");
           setOpenAddModel(false);
@@ -51,7 +51,7 @@ const FaqModal = ({
     } else {
       try {
         const res = await createFaq(values).unwrap();
-        console.log(res);
+        //console.log(res);
         if (res.success) {
           toast.success("Faq added successfully");
           setOpenAddModel(false);

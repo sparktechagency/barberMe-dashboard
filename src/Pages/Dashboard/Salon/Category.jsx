@@ -208,7 +208,7 @@ const Category = () => {
           Create Category
         </Button>
       </div>
-      <Table columns={columns} dataSource={filteredCategories} rowKey="id" />
+      <Table columns={columns} dataSource={filteredCategories} rowKey="_id" />
       <Modal
         title={editingCategory ? "Edit Category" : "Create Category"}
         open={isModalVisible}

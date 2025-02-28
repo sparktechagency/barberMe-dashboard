@@ -11,12 +11,12 @@ const ResetPassword = () => {
   const [resetPassword] = useResetPasswordMutation(); // Destructure mutation with loading state
 
   const onFinish = async (values) => {
-    console.log({ email, ...values });
+    //console.log({ email, ...values });
     const data = { email, ...values }; // Combine email and new password values into an object
 
     try {
       const response = await resetPassword(data).unwrap();
-      console.log(response);
+      //console.log(response);
       if (response?.success) {
         message.success("Password updated successfully!");
         navigate(`/auth/login`);

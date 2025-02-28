@@ -18,7 +18,7 @@ const SalesTrackingChart = () => {
   }
 
   const revenue = revenueData?.data;
-  console.log(revenue);
+  //console.log(revenue);
 
   return (
     <ResponsiveContainer width="95%" height={250}>

@@ -25,7 +25,7 @@ const AboutUs = () => {
 
   const aboutUsData = aboutUs?.data?.content;
 
-  // console.log(aboutUsData);
+  // //console.log(aboutUsData);
 
   const aboutUsDataSave = async () => {
     const data = {

@@ -16,7 +16,7 @@ const Faq = () => {
   const [modalData, setModalData] = useState(null);
   const [deleteFaq] = useDeleteFaqMutation();
 
-  // console.log(modalData);
+  // //console.log(modalData);
 
   const { data: faqs, isLoading } = useGetFaqQuery();
 
@@ -25,7 +25,7 @@ const Faq = () => {
   }
 
   const faqData = faqs?.data;
-  console.log(faqData);
+  //console.log(faqData);
 
   const handleDelete = async (id) => {
     try {

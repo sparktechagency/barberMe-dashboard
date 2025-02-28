@@ -19,7 +19,7 @@ const Login = () => {
     };
 
     try {
-      console.log(values);
+      //console.log(values);
       const response = await login(data).unwrap();
       const { accessToken } = response?.data;
       const { refreshToken } = response?.data;

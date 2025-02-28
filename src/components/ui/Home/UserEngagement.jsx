@@ -19,7 +19,7 @@ const UserEngagement = () => {
   }
 
   const statistics = userStatistics?.data;
-  console.log(statistics);
+  //console.log(statistics);
 
   return (
     <div className="bg-white p-6 w-[100%] h-[350px] rounded-2xl border">

@@ -39,7 +39,7 @@ const CreateBlog = ({
   };
 
   const onFinish = (values) => {
-    console.log(values);
+    //console.log(values);
     // Handle form submission logic here
   };
 

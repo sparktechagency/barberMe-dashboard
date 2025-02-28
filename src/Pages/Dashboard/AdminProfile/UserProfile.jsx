@@ -11,7 +11,7 @@ import {
 } from "../../../redux/apiSlices/authSlice";
 import logo from "../../../assets/randomProfile2.jpg";
 import toast from "react-hot-toast";
-import rentMeLogo from "../../../assets/navLogo.png";
+import logo2 from "../../../assets/barberMeLogo.png";
 
 const baseUrl = import.meta.env.VITE_BASE_URL;
 
@@ -21,13 +21,13 @@ const PersonalInfo = () => {
   const [file, setFile] = useState(null);
   const [form] = Form.useForm();
 
-  console.log(contact);
+  //console.log(contact);
 
   const { data: userData, isLoading } = useFetchAdminProfileQuery();
   const [updateAdminProfile] = useUpdateAdminProfileMutation();
 
   const adminData = userData?.data;
-  // console.log(adminData);
+  // //console.log(adminData);
 
   useEffect(() => {
     if (adminData) {
@@ -49,7 +49,7 @@ const PersonalInfo = () => {
   if (isLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <img src={rentMeLogo} alt="" />
+        <img src={logo2} alt="" />
       </div>
     );
   }
@@ -90,7 +90,7 @@ const PersonalInfo = () => {
   };
 
   const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
+    //console.log("Failed:", errorInfo);
   };
 
   return (

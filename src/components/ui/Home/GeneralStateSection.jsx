@@ -1,5 +1,5 @@
 import { FaUsers } from "react-icons/fa6";
-import salongoLogo from "../../../assets/salon-go-logo.png";
+import logo from "../../../assets/barberMeLogo.png";
 import { useGeneralStatsQuery } from "../../../redux/apiSlices/dashboardSlice";
 
 const GeneralStateSection = () => {
@@ -8,14 +8,14 @@ const GeneralStateSection = () => {
   if (isLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <img src={salongoLogo} alt="" />
+        <img src={logo} alt="" />
       </div>
     );
   }
 
   const state = generalState?.data;
 
-  console.log(state);
+  //console.log(state);
 
   return (
     <div className="grid md:grid-cols-4 gap-3 md:h-[80px]">
