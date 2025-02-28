@@ -5,8 +5,8 @@ import Cookies from "js-cookie";
 // Enhanced base query to handle token refresh
 const baseQueryWithReauth = async (args, api, extraOptions) => {
   const baseQuery = fetchBaseQuery({
-    baseUrl: "http://10.0.80.75:6005/api/v1/",
-    // baseUrl: "https://nadir.binarybards.online/api/v1/",
+    // baseUrl: "http://10.0.80.75:6005/api/v1/",
+    baseUrl: "https://nadir.binarybards.online/api/v1/",
     prepareHeaders: (headers) => {
       const token =
         localStorage.getItem("authToken") ||
@@ -83,5 +83,5 @@ export const api = createApi({
 });
 
 // Export the image URL as a constant
-export const imageUrl = "http://10.0.80.75:6005/";
-// export const imageUrl = "https://nadir.binarybards.online/";
+// export const imageUrl = "http://10.0.80.75:6005/";
+export const imageUrl = "https://nadir.binarybards.online/";
