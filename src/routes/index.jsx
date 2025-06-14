@@ -41,6 +41,8 @@ import Services from "../Pages/Dashboard/Salon/Services";
 import Category from "../Pages/Dashboard/Salon/Category";
 import SubCategory from "../Pages/Dashboard/Salon/SubCategory";
 import Vendor from "../Pages/Dashboard/Vendor";
+import TermsAndConditions from "../Pages/PublicPages/TermsAndConditions";
+import PublicPrivacy from "../Pages/PublicPages/PublicPrivacy";
 
 const router = createBrowserRouter([
   {
@@ -157,6 +159,14 @@ const router = createBrowserRouter([
         element: <Notifications />,
       },
     ],
+  },
+  {
+    path: "/public/termsAndConditions",
+    element: <TermsAndConditions />,
+  },
+  {
+    path: "/public/privacyPolicy",
+    element: <PublicPrivacy />,
   },
   {
     path: "/auth",
