@@ -1,4 +1,4 @@
-import { Checkbox, Form, Input } from "antd";
+import { Checkbox, Form, Input, Spin } from "antd";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import FormItem from "../../components/common/FormItem";
@@ -10,7 +10,7 @@ const Login = () => {
   const navigate = useNavigate();
   const [rememberMe, setRememberMe] = useState(false);
 
-  const [login] = useLoginMutation();
+  const [login, { isLoading }] = useLoginMutation();
 
   const onFinish = async (values) => {
     const data = {
@@ -122,7 +122,15 @@ const Login = () => {
             }}
             className={`flex items-center justify-center bg-primary text-white rounded-lg`}
           >
-            Sign in
+            {isLoading ? (
+              <Spin
+                color="white"
+                className="text-white"
+                style={{ color: "white" }}
+              />
+            ) : (
+              "Sign in"
+            )}
           </button>
         </Form.Item>
       </Form>

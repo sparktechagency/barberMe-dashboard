@@ -43,6 +43,10 @@ import SubCategory from "../Pages/Dashboard/Salon/SubCategory";
 import Vendor from "../Pages/Dashboard/Vendor";
 import TermsAndConditions from "../Pages/PublicPages/TermsAndConditions";
 import PublicPrivacy from "../Pages/PublicPages/PublicPrivacy";
+import PaymentSuccess from "../components/public/PaymentSuccess";
+import PaymentFailed from "../components/public/PaymentFailed";
+import OnBoardSuccess from "../components/public/OnBoardSuccess";
+import OnBoardFailed from "../components/public/OnBoardFailed";
 
 const router = createBrowserRouter([
   {
@@ -163,6 +167,22 @@ const router = createBrowserRouter([
   {
     path: "/public/termsAndConditions",
     element: <TermsAndConditions />,
+  },
+  {
+    path: "/public/payment-success",
+    element: <PaymentSuccess />,
+  },
+  {
+    path: "/public/payment-failed",
+    element: <PaymentFailed />,
+  },
+  {
+    path: "/public/onboard-success",
+    element: <OnBoardSuccess />,
+  },
+  {
+    path: "/public/onboard-failed",
+    element: <OnBoardFailed />,
   },
   {
     path: "/public/privacyPolicy",
